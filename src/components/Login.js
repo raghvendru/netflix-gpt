@@ -3,10 +3,11 @@ import Header from './Header';
 import { checkValidData } from "../utils/Validate.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/Firebase.js";
-import {  useNavigate } from 'react-router-dom';
 import { updateProfile } from "firebase/auth";
 import { useDispatch } from 'react-redux';
 import { addUser} from "../utils/userSlice.js"
+import { USER_AVATAR,BG_URL } from '../utils/constants.js';
+
 
 
 
@@ -17,7 +18,6 @@ const Login = () => {
   const name = useRef(null);
   const dispatch = useDispatch
 
-  const navigate = useNavigate();
 
 
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -40,7 +40,7 @@ const Login = () => {
         const user = userCredential.user;
          
         updateProfile(user, {
-        displayName: name.current.value, photoURL: "https://firebasestorage.googleapis.com/v0/b/personal-portfolio-829d4.appspot.com/o/myPictures%2FHeroSectionPicture?alt=media&token=31641d40-3176-4776-9bb1-f11289e6d1bb"
+        displayName: name.current.value, photoURL: USER_AVATAR,
 
          }).then(() => {
           const {uid,email,displayName,photoURL} = auth.currentUser;
@@ -48,14 +48,12 @@ const Login = () => {
 
          
 
-          navigate("/browse");
   
         }).catch((error) => {
           setErrorMessgae(error.msg)
   
           });
         console.log("User signed up:", user);
-        navigate("/browse");
       } catch (error) {
         setErrorMessgae(error.code + " - " + error.message);
       }
@@ -66,7 +64,7 @@ const Login = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email.current.value, password.current.value);
         const user = userCredential.user;
         console.log("User signed in:", user);
-        navigate("/browse");
+        
 
       } catch (error) {
         setErrorMessgae(error.code + " - " + error.message);
@@ -80,7 +78,7 @@ const Login = () => {
 
       <div className="absolute">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg"
+          src={BG_URL}
           alt="bg"
         />
       </div>
